@@ -1,0 +1,19 @@
+/*C1*/SET SCHEMA SYSTEM_LOBS
+INSERT INTO BLOCKS VALUES(0,2147483647,0)
+COMMIT
+/*C2*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C3*/SET SCHEMA PUBLIC
+create table Cliente (numero integer not null, nombre varchar(50), primary key (numero))
+create table IMAGES (ID varchar(32) not null, GALLERY varchar(32), image varbinary(16777216), primary key (ID))
+create table OXDISCUSSIONCOMMENTS (id varchar(32) not null, comment clob(16777216), discussionId varchar(32), time timestamp, userName varchar(30), primary key (id))
+create table Producto (numero integer not null, descripcion varchar(50), primary key (numero))
+create index IDXbhlx4vunn24ym1tbrlgq8g30m on OXDISCUSSIONCOMMENTS (discussionId)
+INSERT INTO CLIENTE VALUES(1,'Pedro')
+COMMIT
+INSERT INTO CLIENTE VALUES(2,'Amanda')
+COMMIT
+INSERT INTO PRODUCTO VALUES(1,'XavaPro Professional')
+COMMIT
+INSERT INTO PRODUCTO VALUES(2,'XavaPro Enterprise')
+COMMIT
