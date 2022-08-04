@@ -17,5 +17,8 @@ public class Cliente {
     @Column(length=50) // La longitud de columna se usa a nivel UI y a nivel DB
     @Required  // Se mostrará un error de validación si la propiedad nombre se deja en blanco
     String nombre;
+    
+    @Embedded // Así para referenciar a una clase incrustable
+    Direccion direccion; // Una referencia Java convencional
  
 }
