@@ -42,13 +42,11 @@ public class Factura {
     @ManyToOne(fetch=FetchType.LAZY, optional=false) // El cliente es obligatorio
     Cliente cliente;
     
-    @TextArea
-    String observaciones;
-    
     @ElementCollection
     @ListProperties("producto.numero, producto.descripcion, cantidad")
     Collection<Detalle> detalles;
     
+    @TextArea
+    String observaciones;
     
- 
 }
