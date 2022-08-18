@@ -13,11 +13,13 @@ import com.tuempresa.facturacion.calculadores.*;
 import lombok.*;
 
 @Entity @Getter @Setter
-@View(members= // Esta vista no tiene nombre, por tanto será la vista usada por defecto
-"anyo, numero, fecha;" + // Separados por coma significa en la misma línea
-"cliente;" + // Punto y coma significa nueva línea
-"detalles;" +
-"observaciones;" 
+@View(members=
+"anyo, numero, fecha," + // Los miembros para la cabecera en una línea
+"datos {" + // Una pestaña 'datos' para los datos principales del documento
+    "cliente;" +
+    "detalles;" +
+    "observaciones" +
+"}"
 )
 abstract public class DocumentoComercial extends Identificable{
 
@@ -44,7 +46,7 @@ abstract public class DocumentoComercial extends Identificable{
     @ListProperties("producto.numero, producto.descripcion, cantidad")
     Collection<Detalle> detalles;
     
-    @TextArea
+    @Stereotype("MEMO")
     String observaciones;
 
 }

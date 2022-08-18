@@ -30,7 +30,7 @@ public class Producto {
     @Money // La propiedad precio se usa para almacenar dinero
     BigDecimal precio; // BigDecimal se suele usar para dinero
      
-    @Files // Una galería de fotos completa está disponible
+    @Files// Una galería de fotos completa está disponible
     @Column(length=32) // La cadena de 32 de longitud es para almacenar la clave de la galería
     String fotos;
      
