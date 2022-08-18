@@ -46,7 +46,7 @@ abstract public class DocumentoComercial extends Identificable{
     @ListProperties("producto.numero, producto.descripcion, cantidad")
     Collection<Detalle> detalles;
     
-    @Stereotype("MEMO")
+    @TextArea
     String observaciones;
 
 }
