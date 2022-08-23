@@ -47,7 +47,7 @@ abstract public class DocumentoComercial extends Identificable{
     @ElementCollection
     @ListProperties(
             "producto.numero, producto.descripcion, cantidad, precioPorUnidad, " +
-            "importe+[" + 
+            "importe+[" +
             	"documentoComercial.porcentajeIVA," +
             	"documentoComercial.iva," +
             	"documentoComercial.importeTotal" +
@@ -59,8 +59,11 @@ abstract public class DocumentoComercial extends Identificable{
     String observaciones;
     
     @Digits(integer=2, fraction=0) // Para indicar su tamaño
+    @DefaultValueCalculator(CalculadorPorcentajeIVA.class)
     BigDecimal porcentajeIVA;
-       
+    
+    
+    
     @ReadOnly
     @Money
     @Calculation("sum(detalles.importe) * porcentajeIVA / 100")
