@@ -9,6 +9,7 @@ import javax.validation.constraints.*;
 
 import org.openxava.annotations.*;
 import org.openxava.calculators.*;
+import org.openxava.jpa.*;
 
 import com.tuempresa.facturacion.calculadores.*;
 
@@ -29,12 +30,12 @@ abstract public class DocumentoComercial extends Identificable{
     @DefaultValueCalculator(CurrentYearCalculator.class) // Año actual
     int anyo;
  
-    @Column(length=6)
-    @DefaultValueCalculator(value=CalculadorSiguienteNumeroParaAnyo.class,
-    properties=@PropertyValue(name="anyo") // Para inyectar el valor de anyo de Factura
-                                               // en el calculador antes de llamar a calculate()
-    )
-    int numero;
+	@Column(length = 6)
+	//  @DefaultValueCalculator(value=CalculadorSiguienteNumeroParaAnyo.class, // Quita esto
+	//      properties=@PropertyValue(name="anyo")
+	//  )
+	@ReadOnly // El usuario no puede modificar el valor
+	int numero;
  
     @Required
     @DefaultValueCalculator(CurrentLocalDateCalculator.class) // Fecha actual
@@ -62,8 +63,6 @@ abstract public class DocumentoComercial extends Identificable{
     @DefaultValueCalculator(CalculadorPorcentajeIVA.class)
     BigDecimal porcentajeIVA;
     
-    
-    
     @ReadOnly
     @Money
     @Calculation("sum(detalles.importe) * porcentajeIVA / 100")
@@ -74,4 +73,14 @@ abstract public class DocumentoComercial extends Identificable{
     @Calculation("sum(detalles.importe) + iva")    
     BigDecimal importeTotal;    
 
+    @PrePersist // Ejecutado justo antes de grabar el objeto por primera vez
+    private void calcularNumero() {
+        Query query = XPersistence.getManager().createQuery(
+            "select max(f.numero) from " +
+            getClass().getSimpleName() + // De esta forma es válido para Factura y Pedido
+            " f where f.anyo = :anyo");
+        query.setParameter("anyo", anyo);
+        Integer ultimoNumero = (Integer) query.getSingleResult();
+        this.numero = ultimoNumero == null ? 1 : ultimoNumero + 1;
+    }
 }
