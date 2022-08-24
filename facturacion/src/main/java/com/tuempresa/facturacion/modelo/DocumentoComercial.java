@@ -67,7 +67,12 @@ abstract public class DocumentoComercial extends Identificable{
     @Money
     @Calculation("sum(detalles.importe) * porcentajeIVA / 100")
     BigDecimal iva;
-
+  
+    @org.hibernate.annotations.Formula("IMPORTETOTAL * 0.10") // El cálculo usando SQL
+    @Setter(AccessLevel.NONE) // El setter no se genera, sólo necesitamos el getter
+    @Money
+    BigDecimal beneficioEstimado; // Un campo, como con una propiedad persistente
+    
     @ReadOnly
     @Money
     @Calculation("sum(detalles.importe) + iva")    
