@@ -17,14 +17,16 @@ public class ValidadorISBN
         validador = 
             new org.apache.commons.validator.routines.ISBNValidator();
  
-    public void initialize(ISBN isbn) {
- 
+    private boolean buscar; // Almacena la opción buscar
+    
+    public void initialize(ISBN isbn) { // Lee los atributos de la anotación
+        this.buscar = isbn.buscar();
     }
  
     public boolean isValid(Object valor, ConstraintValidatorContext contexto) {
         if (Is.empty(valor)) return true;
         if (!validador.isValid(valor.toString())) return false;
-        return existeISBN(valor); // Aquí hacemos la llamada REST
+        return buscar ? existeISBN(valor) : true; // Usa 'buscar'
     }
     
     private boolean existeISBN(Object isbn) {

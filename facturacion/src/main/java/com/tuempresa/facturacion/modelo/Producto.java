@@ -16,7 +16,8 @@ public class Producto {
     @Id @Column(length=9)
     int numero;
     
-    @Column(length=13) @ISBN
+    @Column(length=13) 
+    @ISBN(buscar=false)
     String isbn;
  
     @Column(length=50) @Required
