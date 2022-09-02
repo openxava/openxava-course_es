@@ -22,6 +22,8 @@ members=                       // que no incluye cliente ni factura
     "detalles;" +
     "observaciones"
 )
+@Tab(baseCondition = "eliminado = false")
+@Tab(name="Eliminado", baseCondition = "eliminado = true")
 public class Pedido extends DocumentoComercial{
     
     @ManyToOne
@@ -60,12 +62,17 @@ public class Pedido extends DocumentoComercial{
     
     //Alternativ a de validacion al borrar con retrollamada
     @PreRemove
-    private void validarPreBorrar() {
-        if (factura != null) { // La lógica de validación
-            throw new javax.validation.ValidationException( // Lanza una excepción runtime
-                XavaResources.getString( // Para obtener un mensaje de texto
-                    "no_puede_borrar_pedido_con_factura"));
+    private void validarPreBorrar() { // Ahora este método no se ejecuta
+        if (factura != null) { // automáticamente ya que el borrado real no se produce
+            throw new javax.validation.ValidationException(
+                XavaResources.getString("no_puede_borrar_pedido_con_factura"));
         }
+    }
+    
+    
+    public void setEliminado(boolean eliminado) {
+        if (eliminado) validarPreBorrar(); // Llamamos a la validación explícitamente
+        super.setEliminado(eliminado);
     }
     
 }

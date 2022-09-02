@@ -20,5 +20,46 @@
                 clase="acciones.CrearProfesor"/>        
     </controlador>
     -->
+        <!-- Para definir un valor global para una variable de entorno -->
+    <var-entorno
+        nombre="XAVA_SEARCH_ACTION"
+        valor="Facturacion.buscarExcluyendoEliminados" />
+     
+    <controlador nombre="Facturacion"> <!-- El mismo nombre de la entidad-->
+ 
+        <hereda-de controlador="Typical"/> <!-- Hereda todas las acciones de 'Typical' -->
+ 
+        <!-- Typical ya tiene una acción 'delete', al usar el mismo nombre la sobrescribimos -->
+        <accion nombre="delete"
+            modo="detail" confirmar="true"
+            clase="com.tuempresa.facturacion.acciones.EliminarParaFacturacion"
+            icono="delete"
+            disponible-en-nuevo="false"
+            atajo-de-teclado="Control D"/>
+            
+        <accion nombre="buscarExcluyendoEliminados"
+        	oculta="true"
+        	clase="com.tuempresa.facturacion.acciones.BuscarExcluyendoEliminados" />
+        <!-- oculta="true" : Así la acción no se mostrará en la barra de botones -->
+ 
+ 		<accion nombre="deleteSelected" modo="list" confirmar="true"
+        	procesar-elementos-seleccionados="true"
+        	icono="delete"			 
+        	clase="com.tuempresa.facturacion.acciones.EliminarSeleccionadoParaFacturacion"
+        	atajo-de-teclado="Control D"/>				
+	
+    	<accion nombre="deleteRow" modo="NONE" confirmar="true"
+        	clase="com.tuempresa.facturacion.acciones.EliminarSeleccionadoParaFacturacion"
+        	icono="delete"
+        	en-cada-fila="true"/>
+    </controlador>
+    
+    <controlador nombre="Papelera">
+    <accion nombre="restaurar" modo="list"
+        clase="com.tuempresa.facturacion.acciones.EliminarSeleccionadoParaFacturacion">
+        <poner propiedad="restaurar" valor="true"/> <!-- Pone la propiedad restaurar a true -->
+            <!-- antes de llamar al método execute() de la acción -->
+    </accion>
+</controlador>
     
 </controladores>
