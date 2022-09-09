@@ -26,4 +26,25 @@ public class Factura extends DocumentoComercial{
     @CollectionView("SinClienteNiFactura") // Esta vista se usa para visualizar pedidos
     Collection<Pedido> pedidos; // Colección de entidades Pedido añadida
 	
+    
+    public static Factura crearDesdePedidos(Collection<Pedido> pedidos)
+            throws CrearFacturaException
+        {
+            Factura factura = null;
+            for (Pedido pedido: pedidos) {
+                if (factura == null) { // El primero pedido
+                    pedido.crearFactura(); // Reutilizamos la lógica para crear una
+                                           // factura desde un pedido
+                    factura = pedido.getFactura(); // y usamos la factura creada
+                }
+                else { // Para el resto de los pedidos la factura ya está creada
+                    pedido.setFactura(factura); // Asigna la factura
+                    pedido.copiarDetallesAFactura(); // Un método de Pedido para copiar las lineas
+                } 
+            } 
+            if (factura == null) { // Si no hay pedidos
+                throw new CrearFacturaException("pedidos_no_especificados");
+            }
+            return factura;
+        }
 }

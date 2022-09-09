@@ -87,4 +87,10 @@ abstract public class DocumentoComercial extends Eliminable{
         Integer ultimoNumero = (Integer) query.getSingleResult();
         this.numero = ultimoNumero == null ? 1 : ultimoNumero + 1;
     }
+    
+    public String toString() {
+        return anyo + "/" + numero;
+    }
+    
+    
 }
