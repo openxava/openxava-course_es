@@ -31,6 +31,8 @@ public class Pedido extends DocumentoComercial {
 	@ManyToOne
 	@ReferenceView("SinClienteNiPedidos") // Esta vista se usa para visualizar factura
 	@OnChange(MostrarOcultarCrearFactura.class) // Añade esto
+    @SearchAction("Pedido.buscarFactura") // Define nuestra acción para buscar facturas
+	@OnChangeSearch(BuscarAlCambiarFactura.class)
 	private Factura factura;
 
 	@Depends("fecha")
@@ -84,37 +86,40 @@ public class Pedido extends DocumentoComercial {
 		super.setEliminado(eliminado);
 	}
 
-	public void crearFactura()
-		    throws CrearFacturaException // Una excepción de aplicación (1)
-		{
-		    if (this.factura != null) { // Si ya tiene una factura no podemos crearla
-		        throw new CrearFacturaException( 
-		            "pedido_ya_tiene_factura"); // Admite un id de 18n como argumento
-		    }
-		    if (!isEntregado()) { // Si el pedido no está entregado no podemos crear la factura
-		        throw new CrearFacturaException("pedido_no_entregado");
-		    }
-		    try {
-		        Factura factura = new Factura(); 
-		        BeanUtils.copyProperties(factura, this); 
-		        factura.setOid(null); 
-		        factura.setFecha(LocalDate.now()); 
-		        factura.setDetalles(new ArrayList<>(getDetalles())); 
-		        XPersistence.getManager().persist(factura);
-		        this.factura = factura; 
-		    }
-		    catch (Exception ex) { // Cualquier excepción inesperada (2)
-		        throw new SystemException( // Se lanza una excepción runtime (3)
-		            "imposible_crear_factura", ex);
-		    }
+	public void crearFactura() throws CrearFacturaException // Una excepción de aplicación (1)
+	{
+		if (this.factura != null) { // Si ya tiene una factura no podemos crearla
+			throw new CrearFacturaException("pedido_ya_tiene_factura"); // Admite un id de 18n como argumento
 		}
-	
-	
-    public void copiarDetallesAFactura() { 
-        factura.getDetalles().addAll(getDetalles()); // Copia las líneas
-        factura.setIva(factura.getIva().add(getIva())); // Acumula el IVA
-        factura.setImporteTotal( // y el importe total
-		    factura.getImporteTotal().add(getImporteTotal()));
-    }
+		if (!isEntregado()) { // Si el pedido no está entregado no podemos crear la factura
+			throw new CrearFacturaException("pedido_no_entregado");
+		}
+		try {
+			Factura factura = new Factura();
+			BeanUtils.copyProperties(factura, this);
+			factura.setOid(null);
+			factura.setFecha(LocalDate.now());
+			factura.setDetalles(new ArrayList<>(getDetalles()));
+			XPersistence.getManager().persist(factura);
+			this.factura = factura;
+		} catch (Exception ex) { // Cualquier excepción inesperada (2)
+			throw new SystemException( // Se lanza una excepción runtime (3)
+					"imposible_crear_factura", ex);
+		}
+	}
+
+	public void copiarDetallesAFactura() {
+		factura.getDetalles().addAll(getDetalles()); // Copia las líneas
+		factura.setIva(factura.getIva().add(getIva())); // Acumula el IVA
+		factura.setImporteTotal( // y el importe total
+				factura.getImporteTotal().add(getImporteTotal()));
+	}
+
+	// Este método ha de devolver true para que este pedido sea válido
+	@AssertTrue(message = "cliente_pedido_factura_coincidir")
+	private boolean isClienteFacturaCoincide() {
+		return factura == null || // factura es opcional
+				factura.getCliente().getNumero() == getCliente().getNumero();
+	}
 
 }

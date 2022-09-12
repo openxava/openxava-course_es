@@ -27,6 +27,7 @@ abstract public class DocumentoComercial extends Eliminable{
 
 	@Column(length=4)
     @DefaultValueCalculator(CurrentYearCalculator.class) // Año actual
+	@SearchKey
     int anyo;
  
 	@Column(length = 6)
@@ -34,6 +35,7 @@ abstract public class DocumentoComercial extends Eliminable{
 	//      properties=@PropertyValue(name="anyo")
 	//  )
 	@ReadOnly // El usuario no puede modificar el valor
+	@SearchKey
 	int numero;
  
     @Required

@@ -24,6 +24,7 @@ public class Factura extends DocumentoComercial{
  
     @OneToMany(mappedBy="factura")
     @CollectionView("SinClienteNiFactura") // Esta vista se usa para visualizar pedidos
+    @AddAction("Factura.anyadirPedidos")
     Collection<Pedido> pedidos; // Colección de entidades Pedido añadida
 	
     

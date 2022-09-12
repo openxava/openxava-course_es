@@ -52,7 +52,6 @@
 	</controlador>
 
 
-
 	<controlador nombre="Pedido">
 		<hereda-de controlador="Facturacion" /> <!-- Para tener las acciones estándar -->
 
@@ -66,8 +65,13 @@
 			clase="com.tuempresa.facturacion.acciones.CrearFacturaDesdePedidosSeleccionados" />
 		<!-- modo="list": Sólo se muestra en modo lista -->
 
-	</controlador>
+		<accion nombre="buscarFactura"
+			clase="com.tuempresa.facturacion.acciones.BuscarFacturaDesdePedido"
+			oculta="true" icono="magnify" />
+		<!-- oculta="true" : Para que no se muestre en la barra de botones del 
+			módulo icono="magnify" : La misma imagen que la de la acción estándar -->
 
+	</controlador>
 
 
 	<controlador nombre="EdicionFactura">
@@ -78,6 +82,27 @@
 
 		<accion nombre="cerrar"
 			clase="org.openxava.actions.CancelAction" />
+
+	</controlador>
+
+
+	<controlador nombre="Factura">
+		<hereda-de controlador="Facturacion" />
+
+		<accion nombre="anyadirPedidos"
+			clase="com.tuempresa.facturacion.acciones.IrAnyadirPedidosAFactura"
+			oculta="true" icono="table-row-plus-after" />
+		<!-- oculta="true" : No se mostrará en la barra de botones del módulo icono="table-row-plus-after" 
+			: La misma imagen que la acción estándar -->
+
+	</controlador>
+
+	<controlador nombre="AnyadirPedidosAFactura">
+		<hereda-de controlador="AddToCollection" /> <!-- Extiende del controlador estándar -->
+
+		<!-- Sobrescribe la acción para añadir -->
+		<accion nombre="add"
+			clase="com.tuempresa.facturacion.acciones.AnyadirPedidosAFactura" />
 
 	</controlador>
 
