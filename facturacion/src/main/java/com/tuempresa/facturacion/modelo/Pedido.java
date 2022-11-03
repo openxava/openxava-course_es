@@ -24,7 +24,7 @@ import lombok.*;
 		members = // que no incluye cliente ni factura
 		"anyo, numero, fecha;" + // Ideal para ser usada desde Factura
 				"detalles;" + "observaciones")
-@Tab(baseCondition = "eliminado = false")
+@Tab(baseCondition = "${eliminado} = false")
 @Tab(name = "Eliminado", baseCondition = "eliminado = true")
 public class Pedido extends DocumentoComercial {
 
