@@ -23,7 +23,7 @@ members=                       // que no incluye cliente ni factura
     "observaciones"
 )
 @Tab(baseCondition = "${eliminado} = false")
-@Tab(name="Eliminado", baseCondition = "eliminado = true")
+@Tab(name="Eliminado", baseCondition = "${eliminado} = true")
 public class Pedido extends DocumentoComercial{
     
     @ManyToOne
