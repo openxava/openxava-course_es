@@ -18,8 +18,8 @@ members=                       // que no incluye cliente ni pedidos
     "detalles;" +
     "observaciones"
 )
-@Tab(baseCondition = "eliminado = false") // Tab sin nombre, es el de por defecto
-@Tab(name="Eliminado", baseCondition = "eliminado = true") // Tab con nombre
+@Tab(baseCondition = "${eliminado} = false") // Tab sin nombre, es el de por defecto
+@Tab(name="Eliminado", baseCondition = "${eliminado} = true") // Tab con nombre
 public class Factura extends DocumentoComercial{
  
     @OneToMany(mappedBy="factura")
